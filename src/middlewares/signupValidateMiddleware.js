@@ -1,9 +1,9 @@
 import signupSchema from "../schemas/signUpSchema";
 
 
-export async function signUpValidate(req, res, next) {
+export async function signUpValidation(req, res, next) {
     const { name, email, password, confirmedPass } = req.body;
-    const signUpData = req.body
+    const signUpData = req.body;
 
     const { error } = signupSchema.validate(signUpData, { abortEarly: false });
 

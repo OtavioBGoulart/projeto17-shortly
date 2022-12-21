@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-export async function singInValidate(req, res, next)  {
+export async function singInValidation(req, res, next)  {
 
     const { email, password } = req.body;
 
