@@ -6,7 +6,7 @@ export async function signUp(req, res) {
     const { name, email, password }  = req.body;
 
     try {
-        const hashPassword = bcrypt.hashSync(password);
+        const hashPassword = bcrypt.hashSync(password, 11);
         await connectionDB.query(`
             INSERT INTO users (name, email, password) VALUES ($1, $2, $3)
         ;`, [name, email, hashPassword])
