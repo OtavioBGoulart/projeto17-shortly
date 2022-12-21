@@ -1,4 +1,5 @@
-import signupSchema from "../schemas/signUpSchema";
+import signupSchema from "../schemas/signUpSchema.js";
+import { connectionDB } from "../database/db.js";
 
 
 export async function signUpValidation(req, res, next) {

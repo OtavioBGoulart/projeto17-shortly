@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { connectionDB } from "../database/db.js";
 
 export async function singInValidation(req, res, next)  {
 
@@ -10,10 +11,13 @@ export async function singInValidation(req, res, next)  {
         `, [email])
         if (userExist.rowCount === 0) return res.sendStatus(401);
 
-        const passwordCompare = bcrypt.compare(password, userExist.password);
+        const passwordCompare = bcrypt.compareSync(password, userExist.rows[0].password);
         if (!passwordCompare) return res.sendStatus(401);
 
-        req.singInData = userExist.rows[0];
+        //console.log(passwordCompare);
+        console.log(userExist.rows[0])
+
+        req.signInData = userExist.rows[0];
 
     } catch(error) {
         console.log(error);
