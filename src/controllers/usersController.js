@@ -37,6 +37,7 @@ export async function signIn(req, res) {
 export async function shortenUrl(req, res) {
     const { url } = req.body;
     const  { user } = req.user;
+    console.log(user);
 
     try {
         const shortUrl = nanoid(10);
