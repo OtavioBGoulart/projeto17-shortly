@@ -43,10 +43,10 @@ export async function myUrls(req, res) {
         ;`, [user.user_id])
 
         console.log(myUrls.rows);
-        // const shortenedUrls = query.rows
+        const shortenedUrls = myUrls.rows
 
-        // res.status(200).send({id: user_id, name: user_username, shortenedUrls });
-        res.status(200)
+        res.status(200).send({id: user.user_id, name: user.username, shortenedUrls });
+        
     } catch(error) {
         console.log(error);
         res.sendStatus(500);
