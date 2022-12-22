@@ -58,14 +58,15 @@ export async function myUrls(req, res) {
 export async function getRanking(req, res) {
 
     try {
-        const ranking = connectionDB.query(`
+        const ranking = await connectionDB.query(`
         SELECT users.id, users.name, COUNT(urls.id) AS "linksCount", COALESCE(SUM(urls.visit_count), 0) AS "visitCount" FROM users
         LEFT JOIN urls ON urls.user_id = users.id
         GROUP BY users.id
         ORDER BY "visitCount" DESC
         LIMIT 10;
         ;`)
-        res.sendStatus(200);
+        console.log(ranking);
+        res.status(200).send(ranking.rows);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
