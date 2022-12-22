@@ -1,6 +1,6 @@
 import { connectionDB } from "../database/db.js";
 
-export async function deleteUrl(req, res) {
+export async function urlBelongsUser(req, res) {
     const { user } = req.user;
     const urlId = req.params.id;
 
