@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { URLValidate } from "../middlewares/urlvalidationMiddleware.js";
 import { authorization } from "../middlewares/authMiddleware.js";
-import { shortenUrl } from "../controllers/usersController.js";
+import { getUrlById, shortenUrl } from "../controllers/usersController.js";
 
 const router = Router();
 
 router.post("/urls/shorten", authorization, URLValidate, shortenUrl);
+router.get("/urls/:id", getUrlById);
 
 
 export default router;

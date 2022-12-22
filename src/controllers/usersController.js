@@ -58,15 +58,16 @@ export async function shortenUrl(req, res) {
 export async function getUrlById(req, res) {
 
     const { id } = req.params;
+    console.log(id)
     try {
         const urls = await connectionDB.query(`
-            SELECT (id, short_url, url) FROM urls
+            SELECT * FROM urls
             WHERE id = $1
         ;`, [id])
 
         if (urls.rowCount === 0) return res.sendStatus(404);
 
-        console.log(url.rows[0]);
+        console.log(urls.rows[0]);
         const { short_url, url} = urls.rows[0];
         res.status(200).send({ id, shortUrl: short_url, url});
 
