@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 
 export async function shortenUrl(req, res) {
     const { url } = req.body;
-    const  user  = req.user;
+    const user = req.user;
     console.log(user, url);
 
     try {
@@ -16,7 +16,7 @@ export async function shortenUrl(req, res) {
 
         res.status(201).send({ shortUrl });
 
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         res.sendStatus(500);
     }
@@ -35,33 +35,34 @@ export async function getUrlById(req, res) {
         if (urls.rowCount === 0) return res.sendStatus(404);
 
         console.log(urls.rows[0]);
-        const { short_url, url} = urls.rows[0];
-        res.status(200).send({ id, shortUrl: short_url, url});
+        const { short_url, url } = urls.rows[0];
+        res.status(200).send({ id, shortUrl: short_url, url });
 
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         return res.sendStatus(500);
     }
 }
 
 export async function redirectToUrl(req, res) {
-    const url = req.params;
-    
+    const { shortUrl } = req.params;
+
     try {
-        const shortUrl = await connectionDB.query(`
+        const shortUrlExist = await connectionDB.query(`
             SELECT * FROM urls WHERE short_url = $1
-        ;`, [url])
-        if (!shortUrl.rows[0].short_url) return res.sendStatus(404);
+        ;`, [shortUrl])        
+        if (shortUrlExist.rowCount === 0) return res.sendStatus(404)
 
         await connectionDB.query(`
             UPDATE urls SET visit_count = visit_count + 1
             WHERE short_url = $1    
-        ;`, [url])
+        ;`, [shortUrl])
 
-        const { url } = shortUrl.rows[0];
+        const { url } = shortUrlExist.rows[0];
         res.redirect(url);
 
-    } catch(error) {
+
+    } catch (error) {
         console.log(error);
         res.sendStatus(500);
     }
