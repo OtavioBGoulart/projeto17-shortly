@@ -8,7 +8,7 @@ const router = Router();
 
 router.post("/urls/shorten", authorization, URLValidate, shortenUrl);
 router.get("/urls/:id", getUrlById);
-router.get("/open/:shortUrl", redirectToUrl);
+router.get("/urls/open/:shortUrl", redirectToUrl);
 router.delete("/urls/:id", authorization, urlBelongsUser, deleteUrl);
 
 

@@ -46,11 +46,13 @@ export async function getUrlById(req, res) {
 
 export async function redirectToUrl(req, res) {
     const { shortUrl } = req.params;
+    console.log(shortUrl)
 
     try {
         const shortUrlExist = await connectionDB.query(`
             SELECT * FROM urls WHERE short_url = $1
-        ;`, [shortUrl])        
+        ;`, [shortUrl])    
+        console.log(shortUrlExist)    
         if (shortUrlExist.rowCount === 0) return res.status(400).send("Url Inexistente")
 
         await connectionDB.query(`

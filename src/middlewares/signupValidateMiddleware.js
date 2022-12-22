@@ -3,7 +3,7 @@ import { connectionDB } from "../database/db.js";
 
 
 export async function signUpValidation(req, res, next) {
-    const { name, email, password, confirmedPass } = req.body;
+    const { email, password, confirmPassword } = req.body;
     const signUpData = req.body;
 
     const { error } = signupSchema.validate(signUpData, { abortEarly: false });
@@ -13,7 +13,7 @@ export async function signUpValidation(req, res, next) {
             return res.status(422).send( {message: errors });
         }
 
-    if (password !== confirmedPass) {
+    if (password !== confirmPassword) {
         return res.status(409).send({ message: "As duas senhas devem ser iguais" })
     }
 
@@ -24,7 +24,7 @@ export async function signUpValidation(req, res, next) {
         
         if (userExist.rowCount > 0) return res.status(409).send( { message: "Esse email já existe"});
 
-        delete signUpData.confirmedPass;
+        delete signUpData.confirmPassword;
         req.signUpData = signUpData;
 
 

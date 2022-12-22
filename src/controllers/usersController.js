@@ -4,13 +4,13 @@ import { connectionDB } from "../database/db.js";
 
 
 export async function signUp(req, res) {
-    const { username, email, password }  = req.body;
+    const { name, email, password }  = req.body;
 
     try {
         const hashPassword = bcrypt.hashSync(password, 11);
         await connectionDB.query(`
-            INSERT INTO users (username, email, password) VALUES ($1, $2, $3)
-        ;`, [username, email, hashPassword])
+            INSERT INTO users (name, email, password) VALUES ($1, $2, $3)
+        ;`, [name, email, hashPassword])
         res.sendStatus(201);
     } catch (error) {
         console.log(error);
@@ -20,10 +20,10 @@ export async function signUp(req, res) {
 
 export async function signIn(req, res) {
     console.log(req.signInData)
-    const { id, username } = req.signInData;
+    const { id, name } = req.signInData;
 
     const token = jwt.sign(
-        { user_id: id, username },
+        { user_id: id, name },
         process.env.TOKEN_KEY,
         {
           expiresIn: 60 * 60 * 12,
@@ -45,7 +45,7 @@ export async function myUrls(req, res) {
         console.log(myUrls.rows);
         const shortenedUrls = myUrls.rows
 
-        res.status(200).send({id: user.user_id, name: user.username, shortenedUrls });
+        res.status(200).send({id: user.user_id, name: user.name, shortenedUrls });
         
     } catch(error) {
         console.log(error);
