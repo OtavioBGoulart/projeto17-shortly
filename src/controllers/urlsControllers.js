@@ -51,7 +51,7 @@ export async function redirectToUrl(req, res) {
         const shortUrlExist = await connectionDB.query(`
             SELECT * FROM urls WHERE short_url = $1
         ;`, [shortUrl])        
-        if (shortUrlExist.rowCount === 0) return res.sendStatus(404)
+        if (shortUrlExist.rowCount === 0) return res.status(400).send("Url Inexistente")
 
         await connectionDB.query(`
             UPDATE urls SET visit_count = visit_count + 1
@@ -75,7 +75,7 @@ export async function deleteUrl(req, res) {
     try {
         await connectionDB.query(`
         DELETE FROM urls WHERE id = $1
-    ;`, [urlId])
+    ;`, [id])
 
     res.sendStatus(204);
         
