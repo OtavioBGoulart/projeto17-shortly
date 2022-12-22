@@ -36,11 +36,11 @@ export async function signIn(req, res) {
 
 export async function shortenUrl(req, res) {
     const { url } = req.body;
-    const  { user } = req.user;
-    console.log(user);
+    const  user  = req.user;
+    console.log(user, url);
 
     try {
-        const shortUrl = nanoid(10);
+        const shortUrl = nanoid(6);
 
         await connectionDB.query(`
             INSERT INTO urls (url, short_url, visit_count, user_id)

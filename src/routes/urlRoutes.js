@@ -5,7 +5,7 @@ import { shortenUrl } from "../controllers/usersController.js";
 
 const router = Router();
 
-router.post("/urls/shorten");
+router.post("/urls/shorten", authorization, URLValidate, shortenUrl);
 
 
 export default router;

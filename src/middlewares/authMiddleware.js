@@ -9,10 +9,10 @@ export function authorization(req, res, next) {
     try {
         const decoded = jwt.verify(token, process.env.TOKEN_KEY);
         req.user = decoded;
+        //console.log(decoded);
+        next();
       } catch (error) {
         console.log(error);
-        return res.status(401).send("Token inválido");
+        res.status(401).send("Token inválido");
       }
-      return next();
-    
 }
