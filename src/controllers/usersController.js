@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { connectionDB } from "../database/db.js";
+import { query } from "express";
 
 
 export async function signUp(req, res) {
-    const { name, email, password }  = req.body;
+    const { name, email, password } = req.body;
 
     try {
         const hashPassword = bcrypt.hashSync(password, 11);
@@ -26,11 +27,11 @@ export async function signIn(req, res) {
         { user_id: id, name },
         process.env.TOKEN_KEY,
         {
-          expiresIn: 60 * 60 * 12,
+            expiresIn: 60 * 60 * 12,
         }
-      )
+    )
 
-      res.status(200).send({ token });
+    res.status(200).send({ token });
 }
 
 export async function myUrls(req, res) {
@@ -45,13 +46,29 @@ export async function myUrls(req, res) {
         console.log(myUrls.rows);
         const shortenedUrls = myUrls.rows
 
-        res.status(200).send({id: user.user_id, name: user.name, shortenedUrls });
-        
-    } catch(error) {
+        res.status(200).send({ id: user.user_id, name: user.name, shortenedUrls });
+
+    } catch (error) {
         console.log(error);
         res.sendStatus(500);
     }
 
 }
 
+export async function getRanking(req, res) {
 
+    try {
+        const ranking = connectionDB.query(`
+        SELECT users.id, users.name, COUNT(urls.id) AS "linksCount", COALESCE(SUM(urls.visit_count), 0) AS "visitCount" FROM users
+        LEFT JOIN urls ON urls.user_id = users.id
+        GROUP BY users.id
+        ORDER BY "visitCount" DESC
+        LIMIT 10;
+        ;`)
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+
+}
